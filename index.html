@@ -28,8 +28,15 @@
             body: JSON.stringify({
                 'message': 'Hello from Telegram!'
             })
-        });
-    }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // {'message': 'Callback received'}
+                // Обрабатывайте ответ
+            })
+            .catch(error => {
+                console.error(error);
+            });
     function receivedHello(message) {
         console.log('Ответ от сервера:', message);
         // Вы можете вывести сообщение на страницу

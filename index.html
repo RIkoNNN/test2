@@ -18,7 +18,7 @@
 <script>
     function sayHello() {
         console.log("Привет");
-        fetch('http://127.0.0.1:8000/', {
+        fetch('http://127.0.0.1:8000/getdata', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +37,7 @@
         // Установите токен бота
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
         // Установите URL для обратного вызова
-        url: 'http://127.0.0.1:8000/',
+        url: 'http://127.0.0.1:8000/getdata',
         // Установите функцию для обработки ответа
         onMessage: function(message) {
             // Обрабатывайте сообщение

@@ -18,7 +18,7 @@
 <script>
     function sayHello() {
         console.log("Привет");
-        fetch('http://127.0.0.1:8000/getdata', {
+        fetch('https://eb61-95-26-10-128.ngrok-free.app/getdata', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -37,30 +37,12 @@
         // Установите токен бота
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
         // Установите URL для обратного вызова
-        url: 'http://127.0.0.1:8000/getdata',
+        url: 'https://eb61-95-26-10-128.ngrok-free.app/getdata',
         // Установите функцию для обработки ответа
         onMessage: function(message) {
             // Обрабатывайте сообщение
         }
     });
-
-    // Создайте функцию для отправки сообщения
-    function sendMessage() {
-        // Отправьте сообщение на ваш Django сервер
-        console.log('Отправил')
-        fetch('http://127.0.0.1:8000/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'message': 'Hello from Telegram!'
-            })
-        });
-    }
-
-    // Вставьте кнопку для отправки сообщения
-    document.getElementById('send-button').addEventListener('click', sendMessage);
 </script>
 </body>
 </html>

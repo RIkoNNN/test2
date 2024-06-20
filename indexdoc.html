@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="MobileOptimized" content="176"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <title>Test</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+</head>
+<body>
+    <button id="send-button">Send</button>
+    <script>
+        // Создайте веб-приложение Telegram
+        window.Telegram.WebApp({
+
+        });
+
+        // Создайте функцию для отправки запроса
+        document.getElementById('send-button').addEventListener('click', function() {
+            // Отправьте запрос на ваш Django сервер
+            fetch('https://eb61-95-26-10-128.ngrok-free.app/getpost/')
+                .then(response => response.json())
+                .then(data => console.log(data));
+        });
+    </script>
+</body>
+</html>

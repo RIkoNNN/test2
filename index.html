@@ -30,6 +30,7 @@
     // Создайте функцию для отправки сообщения
     function sendMessage() {
         // Отправьте сообщение на ваш Django сервер
+        console.log('Отправил')
         fetch('https://eb61-95-26-10-128.ngrok-free.app/getdata/', {
             method: 'POST',
             headers: {

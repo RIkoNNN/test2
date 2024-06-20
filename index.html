@@ -20,7 +20,7 @@
         // Установите токен бота
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
         // Установите URL для обратного вызова
-        url: 'https://eb61-95-26-10-128.ngrok-free.app/getdata/',
+        url: 'http://127.0.0.1:8000/',
         // Установите функцию для обработки ответа
         onMessage: function(message) {
             // Обрабатывайте сообщение
@@ -31,7 +31,7 @@
     function sendMessage() {
         // Отправьте сообщение на ваш Django сервер
         console.log('Отправил')
-        fetch('https://eb61-95-26-10-128.ngrok-free.app/getdata/', {
+        fetch('http://127.0.0.1:8000/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

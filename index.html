@@ -15,6 +15,7 @@
 <body>
 <button id="send-button">Send</button>
 <button id="hello-button">Привет</button>
+<div id="response"></div>
 <script>
     function sayHello() {
         console.log("Привет");
@@ -41,7 +42,9 @@
         url: 'http://127.0.0.1:8000/getdata/',
         // Установите функцию для обработки ответа
         onMessage: function(message) {
-            // Обрабатывайте сообщение
+            console.log('Ответ от сервера:', message);
+            // Вы можете вывести сообщение на страницу
+            document.getElementById('response').textContent = message.message;
         }
     });
 </script>

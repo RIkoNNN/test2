@@ -14,7 +14,15 @@
 </head>
 <body>
 <button id="send-button">Send</button>
+<button id="hello-button">Привет</button>
 <script>
+    function sayHello() {
+        console.log("Привет");
+    }
+
+    // Добавьте обработчик события click на кнопку
+    document.getElementById("hello-button").addEventListener("click", sayHello);
+
     // Создайте веб-приложение Telegram
     window.Telegram.WebApp({
         // Установите токен бота

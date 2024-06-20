@@ -23,7 +23,7 @@
         // Создайте функцию для отправки запроса
         document.getElementById('send-button').addEventListener('click', function() {
             // Отправьте запрос на ваш Django сервер
-            fetch('https://eb61-95-26-10-128.ngrok-free.app/getpost/')
+            fetch('https://eb61-95-26-10-128.ngrok-free.app/getdata/')
                 .then(response => response.json())
                 .then(data => console.log(data));
         });

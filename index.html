@@ -30,6 +30,11 @@
             })
         });
     }
+    function receivedHello(message) {
+        console.log('Ответ от сервера:', message);
+        // Вы можете вывести сообщение на страницу
+        document.getElementById('response').textContent = message.message;
+    }
 
     // Добавьте обработчик события click на кнопку
     document.getElementById("hello-button").addEventListener("click", sayHello);

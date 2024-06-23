@@ -16,40 +16,46 @@
 <button id="send-button">Send</button>
 <div id="response"></div>
 <script>
+    window.Telegram.WebApp.enableClosingConfirmation();
 
     // Обработчик нажатия на кнопку "Send"
-    document.getElementById("send-button").addEventListener("click", () => {
-        // Отправка данных в Telegram бот
-        window.Telegram.WebApp.sendData(JSON.stringify({
-            action: 'get_data',
-            data: { message: 'Hello from webapp!' }
-        }));
+    document.getElementById("send-button").addEventListener("click", async () => {
+        try {
+            // Отправка данных в Telegram бот
+            await window.Telegram.WebApp.sendData(JSON.stringify({
+                action: 'get_data',
+                data: { message: 'Hello from webapp!' }
+            }));
 
-        // Запрет на уменьшение окна
-        window.Telegram.WebApp.onEvent('viewportChanged', () => {
-            if (window.Telegram.WebApp.isExpanded()) {
-                window.Telegram.WebApp.expand();
-            }
-        });
+            // Закрытие webapp после успешной отправки данных
+            window.Telegram.WebApp.close();
+        } catch (error) {
+            console.error('Ошибка при отправке данных:', error);
+            // Обработка ошибки, например, вывод сообщения об ошибке
+            document.getElementById('response').textContent = 'Произошла ошибка при отправке данных.';
+        }
     });
 
-    window.Telegram.WebApp.enableClosingConfirmation();
-    function receivedHello(message) {
+    // Обработчик события закрытия webapp
+    window.Telegram.WebApp.onEvent('closeWebViewEvent', (event) => {
+        event.preventDefault();
+        // Здесь можно добавить дополнительную логику, например, проверку состояния отправки данных
+    });
+
+    // Обработчик ответа от бота
+    window.Telegram.WebApp.onEvent('message', (message) => {
         console.log('Ответ от сервера:', message);
         if (message.hasOwnProperty('message')) {
             document.getElementById('response').textContent = message.message;
         } else {
             document.getElementById('response').textContent = 'Ошибка: Ответ от сервера не содержит ожидаемых данных.';
         }
-    }
+    });
 
+    // Инициализация Telegram Web App
     window.Telegram.WebApp({
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
         url: 'http://127.0.0.1:8000/getdata/',
-        onMessage: function(message) {
-            console.log('Ответ от сервера123:', message);
-            document.getElementById('response').textContent = message.message;
-        }
     });
 </script>
 </body>

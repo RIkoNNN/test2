@@ -14,49 +14,27 @@
 </head>
 <body>
 <button id="send-button">Send</button>
-<button id="hello-button">Привет</button>
 <div id="response"></div>
 <script>
-    function sayHello() {
-        console.log("Привет");
-        fetch('http://127.0.0.1:8000/getdata/', {
-            method: 'POST',
-            headers: {
-                'Access-Control-Request-Headers': 'Content-Type',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'message': 'Hello from Telegram!'
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('response').textContent = data.message;
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
 
-    window.Telegram.WebApp.sendData(JSON.stringify({
-        action: 'get_data',
-        data: {} // Дополнительные параметры, если нужно
-    }));
-
-    window.Telegram.WebApp.onEvent('mainButtonClicked', function() {
+    document.getElementById("send-button").addEventListener("click", () => {
+        // Отправка данных в Telegram бот
         window.Telegram.WebApp.sendData(JSON.stringify({
             action: 'get_data',
-            data: {}
+            data: { message: 'Hello from webapp!' }
         }));
-    });
 
+        // Запрет на уменьшение окна
+        window.Telegram.WebApp.onEvent('viewportChanged', () => {
+            if (window.Telegram.WebApp.isExpanded()) {
+                window.Telegram.WebApp.expand();
+            }
+        });
+    });
     function receivedHello(message) {
         console.log('Ответ от сервера:', message);
         document.getElementById('response').textContent = message.message;
     }
-
-    document.getElementById("hello-button").addEventListener("click", sayHello);
 
     window.Telegram.WebApp({
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',

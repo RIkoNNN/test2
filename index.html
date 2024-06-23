@@ -31,32 +31,38 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data); // {'message': 'Callback received'}
-                // Обрабатывайте ответ
+                document.getElementById('response').textContent = data.message;
+                console.log(data);
             })
             .catch(error => {
                 console.error(error);
             });
     }
+
+    window.Telegram.WebApp.sendData(JSON.stringify({
+        action: 'get_data',
+        data: {} // Дополнительные параметры, если нужно
+    }));
+
+    window.Telegram.WebApp.onEvent('mainButtonClicked', function() {
+        window.Telegram.WebApp.sendData(JSON.stringify({
+            action: 'get_data',
+            data: {}
+        }));
+    });
+
     function receivedHello(message) {
         console.log('Ответ от сервера:', message);
-        // Вы можете вывести сообщение на страницу
         document.getElementById('response').textContent = message.message;
     }
 
-    // Добавьте обработчик события click на кнопку
     document.getElementById("hello-button").addEventListener("click", sayHello);
 
-    // Создайте веб-приложение Telegram
     window.Telegram.WebApp({
-        // Установите токен бота
         botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
-        // Установите URL для обратного вызова
         url: 'http://127.0.0.1:8000/getdata/',
-        // Установите функцию для обработки ответа
         onMessage: function(message) {
-            console.log('Ответ от сервера:', message);
-            // Вы можете вывести сообщение на страницу
+            console.log('Ответ от сервера123:', message);
             document.getElementById('response').textContent = message.message;
         }
     });

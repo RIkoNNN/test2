@@ -17,9 +17,10 @@
 <div id="response"></div>
 <script>
 
+    // Обработчик нажатия на кнопку "Send"
     document.getElementById("send-button").addEventListener("click", () => {
         // Отправка данных в Telegram бот
-        window.Telegram.WebApp.sendData(JSON.stringify({
+        window.Telegram.WebApp.sendWebAppData(JSON.stringify({
             action: 'get_data',
             data: { message: 'Hello from webapp!' }
         }));
@@ -33,7 +34,11 @@
     });
     function receivedHello(message) {
         console.log('Ответ от сервера:', message);
-        document.getElementById('response').textContent = message.message;
+        if (message.hasOwnProperty('message')) {
+            document.getElementById('response').textContent = message.message;
+        } else {
+            document.getElementById('response').textContent = 'Ошибка: Ответ от сервера не содержит ожидаемых данных.';
+        }
     }
 
     window.Telegram.WebApp({

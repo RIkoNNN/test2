@@ -17,20 +17,21 @@
 <div id="response"></div>
 <script>
     window.Telegram.WebApp.enableClosingConfirmation();
-
-    window.addEventListener('DOMContentLoaded', () => {
-        try {
-            // Получение данных пользователя из Telegram Web App
-            const userData = window.Telegram.WebApp.initData;
-            console.log(userData);
-
-            // Здесь можно добавить дополнительную логику, используя полученные данные
-        } catch (error) {
-            console.error('Ошибка при получении данных:', error);
-            // Обработка ошибки, например, вывод сообщения об ошибке
-            document.getElementById('response').textContent = 'Произошла ошибка при получении данных.';
-        }
-    });
+    const userData = window.Telegram.WebApp.initData;
+    print(userData)
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     try {
+    //         // Получение данных пользователя из Telegram Web App
+    //         const userData = window.Telegram.WebApp.initData;
+    //         console.log(userData);
+    //
+    //         // Здесь можно добавить дополнительную логику, используя полученные данные
+    //     } catch (error) {
+    //         console.error('Ошибка при получении данных:', error);
+    //         // Обработка ошибки, например, вывод сообщения об ошибке
+    //         document.getElementById('response').textContent = 'Произошла ошибка при получении данных.';
+    //     }
+    // });
 
     // Обработчик нажатия на кнопку "Send"
     document.getElementById("send-button").addEventListener("click", async () => {

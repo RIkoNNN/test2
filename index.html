@@ -21,7 +21,7 @@
     window.addEventListener('DOMContentLoaded', () => {
         try {
             // Получение данных пользователя из Telegram Web App
-            const userData = JSON.parse(window.Telegram.WebApp.initData);
+            const userData = window.Telegram.WebApp.initData;
             console.log(userData);
 
             // Здесь можно добавить дополнительную логику, используя полученные данные

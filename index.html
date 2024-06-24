@@ -16,40 +16,44 @@
 <button id="send-button">Send</button>
 <div id="response"></div>
 <script>
+    window.Telegram.WebApp.enableClosingConfirmation();
 
-    // Обработчик нажатия на кнопку "Send"
-    document.getElementById("send-button").addEventListener("click", () => {
-        // Отправка данных в Telegram бот
-        window.Telegram.WebApp.sendData(JSON.stringify({
-            action: 'get_data',
-            data: { message: 'Hello from webapp!' }
-        }));
+    document.getElementById("send-button").addEventListener("click", async () => {
+        try {
+            // Получение данных пользователя из Telegram Web App
+            const userData = await window.Telegram.WebApp.initData;
+            console.log(userData)
+            // Отправка данных в Telegram бот
+            const response = await fetch(`https://api.telegram.org/bot6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Access-Control-Request-Headers': 'Content-Type',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: userData.chat_id,
+                    text: 'Hello from webapp!'
+                })
+            });
 
-        // Запрет на уменьшение окна
-        window.Telegram.WebApp.onEvent('viewportChanged', () => {
-            if (window.Telegram.WebApp.isExpanded()) {
-                window.Telegram.WebApp.expand();
+            if (response.ok) {
+                // Закрытие webapp после успешной отправки данных
+                document.getElementById('response').textContent = 'Успешно';
+            } else {
+                document.getElementById('response').textContent = 'Ошибка при отправке данных';
             }
-        });
+        } catch (error) {
+            document.getElementById('response').textContent = 'Ошибка при отправке данных';
+        }
     });
 
-    window.Telegram.WebApp.enableClosingConfirmation();
-    function receivedHello(message) {
-        console.log('Ответ от сервера:', message);
-        if (message.hasOwnProperty('message')) {
-            document.getElementById('response').textContent = message.message;
-        } else {
-            document.getElementById('response').textContent = 'Ошибка: Ответ от сервера не содержит ожидаемых данных.';
-        }
-    }
+    window.Telegram.WebApp.onEvent('closeWebViewEvent', (event) => {
+        event.preventDefault();
+    });
 
     window.Telegram.WebApp({
-        botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
-        url: 'http://127.0.0.1:8000/getdata/',
-        onMessage: function(message) {
-            console.log('Ответ от сервера123:', message);
-            document.getElementById('response').textContent = message.message;
-        }
+        botToken: '<6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0>',
+        // url: 'http://127.0.0.1:8000/getdata/',
     });
 </script>
 </body>

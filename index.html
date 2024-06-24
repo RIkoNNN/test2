@@ -13,47 +13,55 @@
     <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
 </head>
 <body>
+<label for="start-date">Начало периода:</label>
+<input type="date" id="start-date" name="start-date">
+<label for="end-date">Конец периода:</label>
+<input type="date" id="end-date" name="end-date">
 <button id="send-button">Send</button>
 <div id="response"></div>
 <script>
-    window.Telegram.WebApp.enableClosingConfirmation();
 
-    document.getElementById("send-button").addEventListener("click", async () => {
-        try {
-            // Получение данных пользователя из Telegram Web App
-            const userData = await window.Telegram.WebApp.initData;
-            console.log(userData)
-            // Отправка данных в Telegram бот
-            const response = await fetch(`https://api.telegram.org/bot6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Access-Control-Request-Headers': 'Content-Type',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: userData.chat_id,
-                    text: 'Hello from webapp!'
-                })
-            });
+    // Обработчик нажатия на кнопку "Send"
+    document.getElementById("send-button").addEventListener("click", () => {
+        // Получение значений полей даты
+        const startDate = document.getElementById("start-date").value;
+        const endDate = document.getElementById("end-date").value;
 
-            if (response.ok) {
-                // Закрытие webapp после успешной отправки данных
-                document.getElementById('response').textContent = 'Успешно';
-            } else {
-                document.getElementById('response').textContent = 'Ошибка при отправке данных';
+        // Отправка данных в Telegram бот
+        window.Telegram.WebApp.sendData(JSON.stringify({
+            action: 'get_data',
+            data: {
+                message: 'Hello from webapp!',
+                startDate: startDate,
+                endDate: endDate
             }
-        } catch (error) {
-            document.getElementById('response').textContent = 'Ошибка при отправке данных';
-        }
+        }));
+
+        // Запрет на уменьшение окна
+        window.Telegram.WebApp.onEvent('viewportChanged', () => {
+            if (window.Telegram.WebApp.isExpanded()) {
+                window.Telegram.WebApp.expand();
+            }
+        });
     });
 
-    window.Telegram.WebApp.onEvent('closeWebViewEvent', (event) => {
-        event.preventDefault();
-    });
+    window.Telegram.WebApp.enableClosingConfirmation();
+    function receivedHello(message) {
+        console.log('Ответ от сервера:', message);
+        if (message.hasOwnProperty('message')) {
+            document.getElementById('response').textContent = message.message;
+        } else {
+            document.getElementById('response').textContent = 'Ошибка: Ответ от сервера не содержит ожидаемых данных.';
+        }
+    }
 
     window.Telegram.WebApp({
-        botToken: '<6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0>',
-        // url: 'http://127.0.0.1:8000/getdata/',
+        botToken: '6670514062:AAGrOdk-QarbcUZK5uJKwV_8gpIe34pUnN0',
+        url: 'http://127.0.0.1:8000/getdata/',
+        onMessage: function(message) {
+            console.log('Ответ от сервера123:', message);
+            document.getElementById('response').textContent = message.message;
+        }
     });
 </script>
 </body>

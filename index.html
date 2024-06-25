@@ -27,6 +27,13 @@
         const startDate = document.getElementById("start-date").value;
         const endDate = document.getElementById("end-date").value;
 
+        // Получение текущей даты
+        const currentDate = new Date().toISOString().slice(0, 10);
+
+        // Установка текущей даты в поля даты
+        document.getElementById("start-date").value = currentDate;
+        document.getElementById("end-date").value = currentDate;
+
         // Отправка данных в Telegram бот
         window.Telegram.WebApp.sendData(JSON.stringify({
             action: 'get_data',

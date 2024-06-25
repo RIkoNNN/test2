@@ -11,36 +11,91 @@
     <meta name="robots" content="noindex,nofollow"/>
     <title>Test</title>
     <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    <style>
+        :root {
+            --tg-theme-button-color: #000000; /* Черный цвет обводки */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .input-field {
+            width: 300px;
+            padding: 12px 16px;
+            border: 2px solid var(--tg-theme-button-color);
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--tg-theme-text-color);
+            background-color: var(--tg-theme-bg-color);
+            margin-bottom: 16px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--tg-theme-button-hover-color);
+        }
+
+        .send-button {
+            width: 300px;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff; /* Белый цвет надписи */
+            background-color: var(--tg-theme-button-color);
+            border: 2px solid var(--tg-theme-button-color);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #response {
+            margin-top: 16px;
+            font-size: 16px;
+        }
+    </style>
 </head>
-<body>
-<label for="start-date">Начало периода:</label>
-<input type="date" id="start-date" name="start-date">
-<label for="end-date">Конец периода:</label>
-<input type="date" id="end-date" name="end-date">
-<button id="send-button">Send</button>
-<div id="response"></div>
+<body onload="setCurrentDateTime()">
+<div class="container">
+    <label for="start-date">Начало периода:</label>
+    <input type="datetime-local" id="start-date" name="start-date" class="input-field">
+    <label for="end-date">Конец периода:</label>
+    <input type="datetime-local" id="end-date" name="end-date" class="input-field">
+    <button id="send-button" class="send-button">Сформировать отчёт</button>
+    <div id="response"></div>
+</div>
 <script>
+    // Функция для установки текущей даты и времени в поля
+    function setCurrentDateTime() {
+        const currentDateTime = new Date().toISOString().slice(0, 16);
+        document.getElementById("start-date").value = currentDateTime;
+        document.getElementById("end-date").value = currentDateTime;
+    }
 
     // Обработчик нажатия на кнопку "Send"
     document.getElementById("send-button").addEventListener("click", () => {
-        // Получение значений полей даты
-        const startDate = document.getElementById("start-date").value;
-        const endDate = document.getElementById("end-date").value;
-
-        // Получение текущей даты
-        const currentDate = new Date().toISOString().slice(0, 10);
-
-        // Установка текущей даты в поля даты
-        document.getElementById("start-date").value = currentDate;
-        document.getElementById("end-date").value = currentDate;
+        // Получение значений полей даты и времени
+        const startDateTime = document.getElementById("start-date").value;
+        const endDateTime = document.getElementById("end-date").value;
 
         // Отправка данных в Telegram бот
         window.Telegram.WebApp.sendData(JSON.stringify({
             action: 'get_data',
             data: {
                 message: 'Hello from webapp!',
-                startDate: startDate,
-                endDate: endDate
+                startDateTime: startDateTime,
+                endDateTime: endDateTime
             }
         }));
 

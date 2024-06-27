@@ -68,28 +68,48 @@
 </head>
 <body onload="setCurrentDateTime()">
 <div class="container">
-    <label for="start-date">Начало периода:</label>
+    <label for="start-date" id="start-label"></label>
     <input type="datetime-local" id="start-date" name="start-date" class="input-field">
-    <label for="end-date">Конец периода:</label>
+    <label for="end-date" id="end-label"></label>
     <input type="datetime-local" id="end-date" name="end-date" class="input-field">
-    <button id="send-button" class="send-button">Сформировать отчёт</button>
+    <button id="send-button" class="send-button"></button>
     <div id="response"></div>
 </div>
 <script>
-    // Функция для установки текущей даты и времени в поля
+    window.Telegram.WebApp.initDataUnsafe();
+    const userData = window.Telegram.WebApp.initData;
+    // Получите язык пользователя
+    const userLanguage = userData.user.language_code;
+
+    // Определите объект с переводами
+    const translations = {
+        en: {
+            startLabel: 'Start date',
+            endLabel: 'End date',
+            sendButton: 'Generate report'
+        },
+        ru: {
+            startLabel: 'Начало периода',
+            endLabel: 'Конец периода',
+            sendButton: 'Сформировать отчёт'
+        }
+    };
+
+    // Используйте язык пользователя для локализации текста
+    document.getElementById('start-label').textContent = translations[userLanguage]?.startLabel || 'Start date';
+    document.getElementById('end-label').textContent = translations[userLanguage]?.endLabel || 'End date';
+    document.getElementById('send-button').textContent = translations[userLanguage]?.sendButton || 'Generate report';
+
     function setCurrentDateTime() {
         const currentDateTime = new Date().toISOString().slice(0, 16);
         document.getElementById("start-date").value = currentDateTime;
         document.getElementById("end-date").value = currentDateTime;
     }
 
-    // Обработчик нажатия на кнопку "Send"
     document.getElementById("send-button").addEventListener("click", () => {
-        // Получение значений полей даты и времени
         const startDateTime = document.getElementById("start-date").value;
         const endDateTime = document.getElementById("end-date").value;
 
-        // Отправка данных в Telegram бот
         window.Telegram.WebApp.sendData(JSON.stringify({
             action: 'get_data',
             data: {
@@ -99,7 +119,6 @@
             }
         }));
 
-        // Запрет на уменьшение окна
         window.Telegram.WebApp.onEvent('viewportChanged', () => {
             if (window.Telegram.WebApp.isExpanded()) {
                 window.Telegram.WebApp.expand();
@@ -113,7 +132,7 @@
         if (message.hasOwnProperty('message')) {
             document.getElementById('response').textContent = message.message;
         } else {
-            document.getElementById('response').textContent = 'Ошибка: Ответ от сервера не содержит ожидаемых данных.';
+            document.getElementById('response').textContent = 'Ошибка';
         }
     }
 

@@ -68,14 +68,39 @@
 </head>
 <body onload="setCurrentDateTime()">
 <div class="container">
-    <label for="start-date">Начало периода:</label>
+    <label for="start-date" id="start-label"></label>
     <input type="datetime-local" id="start-date" name="start-date" class="input-field">
-    <label for="end-date">Конец периода:</label>
+    <label for="end-date" id="end-label"></label>
     <input type="datetime-local" id="end-date" name="end-date" class="input-field">
-    <button id="send-button" class="send-button">Сформировать отчёт</button>
+    <button id="send-button" class="send-button"></button>
     <div id="response"></div>
 </div>
 <script>
+    alert('test');
+    window.Telegram.WebApp.initDataUnsafe();
+    const userData = window.Telegram.WebApp.initData;
+    // Получите язык пользователя
+    const userLanguage = userData.user.language_code;
+
+    // Определите объект с переводами
+    const translations = {
+        en: {
+            startLabel: 'Start date',
+            endLabel: 'End date',
+            sendButton: 'Generate report'
+        },
+        ru: {
+            startLabel: 'Начало периода',
+            endLabel: 'Конец периода',
+            sendButton: 'Сформировать отчёт'
+        }
+    };
+
+    // Используйте язык пользователя для локализации текста
+    document.getElementById('start-label').textContent = translations[userLanguage]?.startLabel || 'Start date';
+    document.getElementById('end-label').textContent = translations[userLanguage]?.endLabel || 'End date';
+    document.getElementById('send-button').textContent = translations[userLanguage]?.sendButton || 'Generate report';
+
     function setCurrentDateTime() {
         const currentDateTime = new Date().toISOString().slice(0, 16);
         document.getElementById("start-date").value = currentDateTime;
